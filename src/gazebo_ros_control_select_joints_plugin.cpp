@@ -109,6 +109,15 @@ void GazeboRosControlSelectJointsPlugin::Load(gazebo::physics::ModelPtr parent, 
     robot_hw_sim_type_str_ = "gazebo_ros_control/DefaultRobotHWSim";
     ROS_DEBUG_STREAM_NAMED("loadThread","Using default plugin for RobotHWSim (none specified in URDF/SDF)\""<<robot_hw_sim_type_str_<<"\"");
   }
+  
+  std::vector<std::string> joint_string_vec;
+  
+  if (!sdf_->HasElement("joints")) {
+    //gzthrow("Have to specify space separated joint names");
+  } else {
+    std::string joint_string = sdf_->GetElement("joints")->Get<std::string>();
+    boost::split( joint_string_vec, joint_string, boost::is_any_of(" ") );
+  }
 
   // Get the Gazebo simulation period
   ros::Duration gazebo_period(parent_model_->GetWorld()->GetPhysicsEngine()->GetMaxStepSize());
@@ -172,6 +181,24 @@ void GazeboRosControlSelectJointsPlugin::Load(gazebo::physics::ModelPtr parent, 
     robot_hw_sim_ = robot_hw_sim_loader_->createInstance(robot_hw_sim_type_str_);
     urdf::Model urdf_model;
     const urdf::Model *const urdf_model_ptr = urdf_model.initString(urdf_string) ? &urdf_model : NULL;
+    
+    if (!joint_string_vec.empty()){
+      
+      std::vector<transmission_interface::TransmissionInfo> filtered_transmissions;
+      
+      for (size_t i = 0; i < transmissions_.size(); ++i){
+
+        const std::string& name = transmissions_[i].joints_[0].name_;
+
+        if (std::find(joint_string_vec.begin(), joint_string_vec.end(), name) != joint_string_vec.end()){
+          filtered_transmissions.push_back(transmissions_[i]);
+        }
+          
+      }
+      
+      transmissions_ = filtered_transmissions;
+    }
+    
 
     if(!robot_hw_sim_->initSim(robot_namespace_, model_nh_, parent_model_, urdf_model_ptr, transmissions_))
     {
