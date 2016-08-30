@@ -7,6 +7,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   control_toolbox
   controller_manager
+  gazebo_ros_control
   hardware_interface 
   transmission_interface
   pluginlib
@@ -24,6 +25,7 @@ catkin_package(
     roscpp
     std_msgs
     controller_manager
+    gazebo_ros_control
     control_toolbox
     pluginlib
     hardware_interface
