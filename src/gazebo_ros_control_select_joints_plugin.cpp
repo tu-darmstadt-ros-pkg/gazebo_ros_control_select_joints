@@ -51,7 +51,11 @@ namespace gazebo_ros_control
 GazeboRosControlSelectJointsPlugin::~GazeboRosControlSelectJointsPlugin()
 {
   // Disconnect from gazebo events
+#if (GAZEBO_MAJOR_VERSION >= 8)
+  update_connection_.reset();
+#else
   gazebo::event::Events::DisconnectWorldUpdateBegin(update_connection_);
+#endif
 }
 
 // Overloaded Gazebo entry point
@@ -120,7 +124,11 @@ void GazeboRosControlSelectJointsPlugin::Load(gazebo::physics::ModelPtr parent, 
   }
 
   // Get the Gazebo simulation period
+#if GAZEBO_MAJOR_VERSION >= 8
+  ros::Duration gazebo_period(parent_model_->GetWorld()->Physics()->GetMaxStepSize());
+#else
   ros::Duration gazebo_period(parent_model_->GetWorld()->GetPhysicsEngine()->GetMaxStepSize());
+#endif
 
   // Decide the plugin control period
   if(sdf_->HasElement("controlPeriod"))
@@ -229,7 +237,11 @@ void GazeboRosControlSelectJointsPlugin::Load(gazebo::physics::ModelPtr parent, 
 void GazeboRosControlSelectJointsPlugin::Update()
 {
   // Get the simulation time and period
+#if GAZEBO_MAJOR_VERSION >= 8
+  gazebo::common::Time gz_time_now = parent_model_->GetWorld()->SimTime();
+#else
   gazebo::common::Time gz_time_now = parent_model_->GetWorld()->GetSimTime();
+#endif
   ros::Time sim_time_ros(gz_time_now.sec, gz_time_now.nsec);
   ros::Duration sim_period = sim_time_ros - last_update_sim_time_ros_;
 
