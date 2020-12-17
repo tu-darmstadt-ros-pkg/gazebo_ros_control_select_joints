@@ -3,13 +3,11 @@
   <version>2.5.6</version>
   <description>gazebo_ros_contrl_select_joints</description>
 
-  <maintainer email="jrivero@osrfoundation.org">Jose Luis Rivero</maintainer>
+  <maintainer email="fabian@sim.tu-darmstadt.de">Stefan Fabian</maintainer>
 
   <license>BSD</license>
 
   <url type="website">http://ros.org/wiki/gazebo_ros_control_select_joints</url>
-  <url type="bugtracker">https://github.com/ros-simulation/gazebo_ros_pkgs/issues</url>
-  <url type="repository">https://github.com/ros-simulation/gazebo_ros_pkgs</url>
 
   <author>Jonathan Bohren</author>
   <author>Dave Coleman</author>
