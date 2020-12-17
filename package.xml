@@ -1,6 +1,6 @@
 <package>
   <name>gazebo_ros_control_select_joints</name>
-  <version>2.5.6</version>
+  <version>2.5.7</version>
   <description>gazebo_ros_contrl_select_joints</description>
 
   <maintainer email="fabian@sim.tu-darmstadt.de">Stefan Fabian</maintainer>
